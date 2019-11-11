@@ -33,7 +33,8 @@ fn main() {
     let args: Vec<String> = env::args().collect();
     let mut opts = Options::new();
     let mut v = 0;
-    opts.optflag("a", "array", "prints in comma-delimited format (seed#,x,x,x,y,y,y)");opts.optflag("h", "help", "print this help menu");
+    opts.optflag("a", "array", "prints in comma-delimited format (seed#,x,x,x,y,y,y)");
+    opts.optflag("h", "help", "print this help menu");
     let matches = match opts.parse(&args[1..]) {
         Ok(m) => { m }
         Err(f) => { panic!(f.to_string()) }
@@ -148,7 +149,7 @@ fn shuffle(mut array: [&str; 4], nseed: i64) -> [&str; 4] {
 
 fn print_recipe(seed: i64, mats: [&str; 6]) {
     println!("\nSeed: {}",seed);
-    println!("Lively Conction: {}, {}, {}",mats[0],mats[1],mats[2]);
+    println!("Lively Concoction: {}, {}, {}",mats[0],mats[1],mats[2]);
     println!("Alchemical Precursor: {}, {}, {}\n",mats[3],mats[4],mats[5]);
 }
 
