@@ -10,7 +10,7 @@ dependencies = [
 
 [[package]]
 name = "narg"
-version = "0.1.0"
+version = "0.3.0"
 dependencies = [
  "getopts 0.2.21 (registry+https://github.com/rust-lang/crates.io-index)",
 ]

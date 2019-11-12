@@ -44,7 +44,7 @@ fn main() {
         return;
     }
     if matches.opt_present("a") {
-        v = v + 1;
+        v+=1;
     }
     let input = if !matches.free.is_empty() {
         matches.free[0].clone()
@@ -63,7 +63,7 @@ fn main() {
 fn init(fseed: f64) -> i64 {
     let fseed = fseed * 0.17127000 + 1323.59030000;
     let iseed = fseed as i64;
-    let iseed = lgm_random(iseed,6);
+    let iseed = lgm_random(iseed,5);
     return iseed;
 }
 
@@ -79,30 +79,28 @@ fn lgm_random(mut iseed: i64, count: i64) -> i64 {
     return iseed;
 }
 
-fn recipe(seed: i64, iseed: i64, nseed: i64, v: usize) {
+fn recipe(seed: i64, mut iseed: i64, nseed: i64, v: usize) {
     let mut mats: [&str; 6] = [""; 6];
-    let mut array = pick_materials(iseed,nseed);
-    let mut x = 2;
+    let mut x = 0;
     let mut i = 0;
-    while x > 0 {
+    let mut prob: [i64; 2] = [0,0];
+    while x < 2 {
+        iseed = lgm_random(iseed,1);
+        let (array,tseed) = pick_materials(iseed,nseed);
+        iseed = tseed;
         for n in 0..3 {
             mats[i] = array[n];
             i+=1;
         }
-        let iseed = lgm_random(iseed,6);
-        array = pick_materials(iseed,nseed);
-        x-=1;
+        iseed = lgm_random(iseed,1);
+        prob[x] = 10 - ((iseed as f64 / I32 as f64) as f64 * -91.0) as i64;
+        x+=1;
+        
     };
-
-    if v == 0 {
-        print_recipe(seed,mats);
-    };
-    if v == 1 {
-        print_array(seed,mats);
-    };
+    print_recipe(seed,mats,v,prob);
 }
 
-fn pick_materials(mut iseed: i64, nseed: i64) -> [&'static str; 4] {
+fn pick_materials(mut iseed: i64, nseed: i64) -> ([&'static str; 4], i64) {
     let mut shuf: [i64; 4] = [25,26,27,28];
     let mut array: [&str; 4] = [""; 4];
     let mut i = 0;
@@ -127,7 +125,7 @@ fn pick_materials(mut iseed: i64, nseed: i64) -> [&'static str; 4] {
     array[2] = LIQUIDS[shuf[2] as usize];
     array[3] = SOLIDS[shuf[3] as usize];
     array = shuffle(array,nseed);
-    return array;
+    return (array,iseed);
 }
 
 fn shuffle(mut array: [&str; 4], nseed: i64) -> [&str; 4] {
@@ -135,24 +133,26 @@ fn shuffle(mut array: [&str; 4], nseed: i64) -> [&str; 4] {
     let mut x = "NA";
     let mut iseed = lgm_random(nseed,1);
     while i>= 0 {
-        let shuffle = (lgm_random(iseed,1) as f64 / I32 as f64 * (i + 1) as f64) as usize;
+        iseed = lgm_random(iseed,1);
+        let shuffle = (iseed as f64 / I32 as f64 * (i + 1) as f64) as usize;
         if shuffle != i as usize {
             mem::swap(&mut x, &mut array[shuffle]);
             mem::swap(&mut x, &mut array[i as usize]);
             mem::swap(&mut x, &mut array[shuffle]);
         };
-        iseed = lgm_random(iseed,1);
-        i = i - 1;
+        i-=1;
     }
     return array;
 }
 
-fn print_recipe(seed: i64, mats: [&str; 6]) {
-    println!("\nSeed: {}",seed);
-    println!("Lively Concoction: {}, {}, {}",mats[0],mats[1],mats[2]);
-    println!("Alchemical Precursor: {}, {}, {}\n",mats[3],mats[4],mats[5]);
-}
-
-fn print_array(seed: i64, mats: [&str; 6]) {
-    println!("{},{},{},{},{},{},{}",seed,mats[0],mats[1],mats[2],mats[3],mats[4],mats[5]);
+fn print_recipe(seed: i64, mats: [&str; 6], v: usize, prob: [i64; 2]) {
+    if v == 0 {
+        println!("\nSeed: {}",seed);
+        println!("Lively Concoction: {}, {}, {}",mats[0],mats[1],mats[2]);
+        println!("Alchemical Precursor: {}, {}, {}",mats[3],mats[4],mats[5]);
+        println!("Lively Concoction Probability: {}%; Alchemical Precursor Probability: {}%\n",prob[0],prob[1]);
+    };
+    if v == 1 {
+        println!("{},{},{},{},{},{},{}",seed,mats[0],mats[1],mats[2],mats[3],mats[4],mats[5]);
+    };
 }
