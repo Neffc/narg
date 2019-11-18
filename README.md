@@ -1,5 +1,5 @@
 NARG  
-(Neff's Alchemical Recipe Generator)  
+(Neff's Alchemy Recipe Generator)  
   
 A tool I made to generate alchemy recipes for Noita. I reimplemented the RNG code, which means it also works offline.  
   
@@ -20,6 +20,6 @@ Search has been added to narg:
   
   
   Example: `narg -s oil water blood oil water alcohol`  
-Above example will search for a seed with a Lively Concoction recipe with oil, water, and blood, and an Alchemical Precursor recipe with oil, water, and alcohol.  
+Above example will search for a seed with a Lively Concoction recipe with oil, water, and blood, and an Alchemic Precursor recipe with oil, water, and alcohol.  
   
 If you have any questions or encounter any issues, feel free to message me on Discord or ping me in the #alchemy channel @Neff#6398.

@@ -23,7 +23,7 @@ const F32: f64 = i32::max_value() as f64;
 const SEEDMAX: i64 = 4294967295;
 
 fn print_about() {
-    println!("\nNeff's Alchemical Recipe Generator (NARG)");
+    println!("\nNeff's Alchemy Recipe Generator (NARG)");
 }
 
 fn print_usage(opts: Options) {
@@ -70,12 +70,12 @@ fn main() {
         if input.len() != 6 {
             println!("\n  Searching requires 6 ingredients. Check your ingredients, and try
                     \ragain. Use option '-l' or see the README.md for additional help.\n
-                    \r    -s, --search	Searches all {} seeds for a given recipe.\n
+                    \r    -s, --search  Searches all {} seeds for a given recipe.\n
                     \r  Since ingredient #2 for both recipes is the ingredient that is
                     \rconsumed, ingredients #1 & #3 are treated interchangeably.\n
                     \r    Example: narg -s oil water blood oil water alcohol\n
                     \r  Above example will search for a seed with a Lively Concoction recipe with
-                    \roil, water, and blood, and an Alchemical Precursor recipe with oil, water, and alcohol.
+                    \roil, water, and blood, and an Alchemic Precursor recipe with oil, water, and alcohol.
                     ",SEEDMAX);
             return;
         }
@@ -92,8 +92,8 @@ fn main() {
     let fseed = seed as f64;
     let nseed = (seed >> 1) + 12534;
     let iseed = init(fseed);
-    let s_mats: [&str; 6] = ["TRUE"; 6];
-    recipe(s_mats,seed,iseed,nseed,v);
+    let s_mats: [&str; 6] = [""; 6]; //Dummy array. idk
+    recipe(seed,iseed,nseed,v,s_mats);
 }
 
 fn init(fseed: f64) -> i64 {
@@ -115,89 +115,78 @@ fn lgm_random(mut iseed: i64, count: i64) -> i64 {
     return iseed;
 }
 
-fn recipe(s_mats: [&str; 6], seed: i64, mut iseed: i64, nseed: i64, v: usize) {
+fn recipe(seed: i64, mut iseed: i64, nseed: i64, v: usize, s_mats: [&str; 6]) {
     let mut mats: [&str; 6] = [""; 6];
     let mut x = 0;
     let mut i = 0;
     let mut prob: [i64; 2] = [0,0];
     while x < 2 {
         iseed = lgm_random(iseed,1);
-        let (array,tseed) = materials(iseed,nseed,s_mats[i+1]);
-        iseed = tseed;
-            for n in 0..3 {
-                mats[i] = array[n];
-                i+=1;
-            }
-            iseed = lgm_random(iseed,1);
-            prob[x] = 10 - ((iseed as f64 / F32) as f64 * -91.0) as i64;
-            if array[0] == s_mats[i-1] || array[1] == s_mats[i-1] || array[2] == s_mats[i-1] || s_mats[1] == "TRUE" {
-                x+=1;
-            } else  {
-                x=2;
-            }
+        let (array,tmp) = materials(iseed,nseed);
+        iseed = tmp;
+        for n in 0..3 {
+            mats[i] = array[n];
+            i+=1;
+        }
+        iseed = lgm_random(iseed,1);
+        prob[x] = 10 - ((iseed as f64 / F32) as f64 * -91.0) as i64;
+        x+=1;
     };
-    match v {
+    match v { //Check for search value; validate search results before printing.
         0 | 1 => print_recipe(seed,mats,v,prob),
-        10 | 11 => if mats[1] == s_mats[1] && mats[4] == s_mats[4] &&
-                (mats[0] == s_mats[0] || mats[0] == s_mats[2]) &&
-                (mats[2] == s_mats[0] || mats[2] == s_mats[2]) &&
-                (mats[3] == s_mats[3] || mats[3] == s_mats[5]) &&
-                (mats[5] == s_mats[3] || mats[5] == s_mats[5]) {
+        10 | 11 => if is_valid(mats,s_mats) == true {
             print_recipe(seed,mats,v,prob);
-            },
+        }
     _ => println!("Err"),
     }
 }
 
-fn materials(mut iseed: i64, nseed: i64, s_mat: &str) -> ([&'static str; 4], i64) {
-    let mut shuf: [usize; 4] = [25,26,27,28];
+fn materials(mut iseed: i64, nseed: i64) -> ([&'static str; 4], i64) {
+    let mut tmp: [usize; 4] = [25,26,27,28];
     let mut array: [&str; 4] = [""; 4];
     let mut i = 0;
     while i < 3 {
         iseed = lgm_random(iseed,1);
-        shuf[i] = (iseed as f64 / F32 * LIQUIDS.len() as f64) as usize;
-        if shuf[0] != shuf[1] && shuf[0] != shuf[2] && shuf[1] != shuf[2] {
+        tmp[i] = (iseed as f64 / F32 * LIQUIDS.len() as f64) as usize;
+        if tmp[0] != tmp[1] && tmp[0] != tmp[2] && tmp[1] != tmp[2] {
             i+=1;
-        };
+        };  //Checking for and removing duplicate liquids.
     }
     iseed = lgm_random(iseed,1);
-    shuf[3] = (iseed as f64 / F32 * SOLIDS.len() as f64) as usize;
+    tmp[3] = (iseed as f64 / F32 * SOLIDS.len() as f64) as usize;
     for n in 0..3 {
-        array[n] = LIQUIDS[shuf[n]];
+        array[n] = LIQUIDS[tmp[n]];
     }
-    array[3] = SOLIDS[shuf[3]];
-    array = shuffle(array,nseed,s_mat);
+    array[3] = SOLIDS[tmp[3]];
+    array = shuffle(array,nseed);
     return (array,iseed);
 }
 
-fn shuffle <'a> (mut array: [&'a str; 4], nseed: i64, s_mat: &str) -> [&'a str; 4] {
+fn shuffle (mut array: [&str; 4], nseed: i64) -> [&str; 4] {
     let mut i: usize = 3;
     let mut iseed = lgm_random(nseed,1);
-    if array[0] == s_mat || array[1] == s_mat || array[2] == s_mat || s_mat == "TRUE" {
-        while i as isize >= 0 {
-            let shuffle = (lgm_random(iseed,1) as f64 / F32 * (i + 1) as f64) as usize;
-            if shuffle != i {
-                array.swap(i, shuffle);
-            };
-            iseed = lgm_random(iseed,1);
-            i-=1;
+    while i as isize >= 0 {
+        let shuffle = (lgm_random(iseed,1) as f64 / F32 * (i as f64 + 1.0)) as usize;
+        if shuffle != i {
+            array.swap(i, shuffle);
         }
-    } else {
-        array = ["","","",""];
-    };
+        iseed = lgm_random(iseed,1);
+        i-=1;
+    }
     return array;
 }
 
 fn print_recipe(seed: i64, mats: [&str; 6], v: usize, prob: [i64; 2]) {
     match v {
         0 => {
-            println!("\nSeed: {}",seed);
-            println!("Lively Concoction: {}, {}, {}",mats[0],mats[1],mats[2]);
-            println!("Alchemical Precursor: {}, {}, {}",mats[3],mats[4],mats[5]);
-            println!("Lively Concoction Probability: {}%; Alchemical Precursor Probability: {}%\n",prob[0],prob[1]);
+            println!("\nSeed: {}
+            \rLively Concoction: {}, {}, {}
+            \rAlchemic Precursor: {}, {}, {}
+            \rLively Concoction Probability: {}%; Alchemic Precursor Probability: {}%\n"
+                ,seed,mats[0],mats[1],mats[2],mats[3],mats[4],mats[5],prob[0],prob[1]);
             },
         1 | 11 => println!("{},{},{},{},{},{},{}",seed,mats[0],mats[1],mats[2],mats[3],mats[4],mats[5]),
-        10 => println!("{}	LC: {},{},{}	AP: {},{},{}",seed,mats[0],mats[1],mats[2],mats[3],mats[4],mats[5]),
+        10 => println!("{}  LC: {},{},{}    AP: {},{},{}",seed,mats[0],mats[1],mats[2],mats[3],mats[4],mats[5]),
         _ => println!("Check args?"),
     }
 }
@@ -210,9 +199,21 @@ fn search_mats(s_mats: [&str; 6], mut seed: i64, v: usize) {
         let fseed = seed as f64;
         let nseed = (seed >> 1) + 12534;
         let iseed = init(fseed);
-        recipe(s_mats,seed,iseed,nseed,v);
+        recipe(seed,iseed,nseed,v,s_mats);
         seed+=1;
         i-=1;
     }
     println!("Time elapsed: {}.{} seconds!",now.elapsed().as_secs(), now.elapsed().subsec_millis());
+}
+
+fn is_valid(mats: [&str; 6], s_mats: [&str; 6]) -> bool{
+    if (mats[1] == s_mats[1] && mats[4] == s_mats[4]) &&
+       (mats[0] == s_mats[0] || mats[0] == s_mats[2]) &&
+       (mats[2] == s_mats[0] || mats[2] == s_mats[2]) &&
+       (mats[3] == s_mats[3] || mats[3] == s_mats[5]) &&
+       (mats[5] == s_mats[3] || mats[5] == s_mats[5]) {
+            return true;
+            } else {
+            return false;
+            }
 }
