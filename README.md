@@ -15,7 +15,7 @@ Search has been added to narg:
  - Each recipe will contain at most 1 "Solid" ingredient. Valid recipes contain either 3 "Liquids", or 2 "Liquids" & 1 "Solid". 6 ingredients total are needed to perform a search.  
  - Seeds are unable to generate with duplicates and/or elements that aren't contained in the "Liquids" or "Solids" categories.  
  - If you attempt to search something that doesn't meet these requirements, narg will still attempt to search for the recipe, but will not return any results (using the `--list` option will show the possible ingredient names for both categories).  
- - Additionally, some recipes that are technically valid are not possible (e.g. narg -s oil water blood mud water soil), and will also not return any results.  
+ - Additionally, some recipes that are technically valid are not possible (e.g. `narg -s oil water blood mud water soil`), and will also not return any results.  
  - Since ingredient #2 for both recipes is the ingredient that is consumed, ingredients #1 & #3 are treated interchangeably for both recipes.  
   
   
