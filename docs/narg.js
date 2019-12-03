@@ -15,14 +15,6 @@ const Solids = ["Sand","Bone Dust (bone)","Soil",
 const I32 = 2147483647;
 const SEEDMAX = 4294967295;
 
-advanced.addEventListener('change', () => {
-  if (advanced.checked == true) {
-    wseed.innerHTML = "checked";
-  } else {
-    wseed.innerHTML = "unchecked";
-  }
-});
-
 seedbox.addEventListener('input', () => {
   var seed = seedbox.value;
   if (seed.length > 0 && seed <= SEEDMAX) {
