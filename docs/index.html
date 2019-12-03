@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>NARG</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<h1>NARG</h1>
+
+<h2>Formula</h2>
+<section id="input">
+  <div>
+    <p>Enter seed:</p>
+    <input type="number" id="seedbox">
+  </div>
+  <p id="maxalert" style="color:#ff6347;"></p>
+</section>
+
+<section id="formula">
+  <table>
+    <tr>
+      <th>Seed:</th>
+      <td id="wseed"></td>
+    </tr>
+    <tr>
+      <th>Lively Concoction:</th>
+      <td id="lc1">LC#1</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td id="lc2">LC#2</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td id="lc3">LC#3</td>
+    </tr>
+    <tr>
+      <th>Alchemic Precursor:</th>
+      <td id="ap1">AP#1</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td id="ap2">AP#2</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td id="ap3">AP#3</td>
+    </tr>
+  </table>
+</section>
+
+<section id="info">
+  <h2>Information</h2>
+  <ul>
+  <li>Each recipe will contain at most 1 <strong>solid</strong> ingredient. Recipes will contain either 3 <strong>liquids</strong>, or 2 <strong>liquids</strong> and 1 <strong>solid</strong>.</li>
+  <p></p>
+  <li>Ingredient #2 in each recipe is the one most consumed. To produce a large amount of LC or AP, the #2 ingredient should be obtained in bulk, with the other two ingredients added in smaller amounts.</li>
+  </ul>
+</section>
+
+<section id="footer">
+<footer>Source available at <a href="https://github.com/Neffc/narg/">github.com/Neffc/narg/</a></footer>
+</section>
+
+<script src="narg.js"></script>
+</body>
+</html>
