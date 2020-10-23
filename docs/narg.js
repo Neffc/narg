@@ -15,7 +15,12 @@ const Solids = ["Sand","Bone Dust (bone)","Soil",
 const I32 = 2147483647;
 const SEEDMAX = 4294967295;
 
-seedbox.addEventListener('input', () => {
+var hash = document.location.hash;
+seedbox.value = parseInt(hash.replace("#",""));
+seedbox.addEventListener('input', collectSeed);
+seedbox.addEventListener('focus', collectSeed);
+
+function collectSeed() {
   var seed = seedbox.value;
   if (seed.length > 0 && seed <= SEEDMAX) {
     seed = parseInt(seed);
@@ -52,7 +57,7 @@ seedbox.addEventListener('input', () => {
   } else {
     maxalert.innerHTML = "";
   }
-});
+}
 
 function main (seed) {
   var iseed = init(seed);
