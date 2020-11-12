@@ -23,7 +23,7 @@ seedbox.addEventListener('input', collectSeed);
 
 function collectSeed() {
   var seed = seedbox.value;
-  if (seed.length > 0 && seed <= SEEDMAX) {
+  if (seed.length > 0 && seed <= SEEDMAX && seed > 0) {
     seed = parseInt(seed);
     var tmp = main(seed);
     var mats = tmp[0];
@@ -55,6 +55,8 @@ function collectSeed() {
   }
   if (seed > SEEDMAX) {
     maxalert.innerHTML = "WARNING: Seeds only go up to 4294967295!";
+  } else if (seed < 0) {
+    maxalert.innerHTML = "Seeds can't be negative!";
   } else {
     maxalert.innerHTML = "";
   }
