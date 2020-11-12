@@ -26,4 +26,4 @@ Above example will search for a seed with a Lively Concoction recipe with oil, w
   
 If you have any questions or encounter any issues, feel free to message me on Discord or ping me in the Noita discord server @Neff#6398.
 
-![Sample output from search](/narg-output.pngraw=true)
+![Sample output from search](/narg-output.png?raw=true)
