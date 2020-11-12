@@ -1,24 +1,25 @@
-const Liquids = ["Water","Chilly Water (water_ice)","Swamp Water (water_swamp)",
-  "Oil","Whiskey (alcohol)","Swamp (swamp)",
-  "Mud","Blood","Fungus (blood_fungi)",
-  "Worm Blood","Toxic Sludge (radioactive_liquid)","Cement",
-  "Acid","Lava","Urine",
-  "Poison (glowing_liquid)","Teleportatium","Polymorphine",
-  "Chaotic Polymorphine","Berserkium","Pheromone",
-  "Invisiblium"];
-const Solids = ["Sand","Bone Dust (bone)","Soil",
-  "Honey","Slime","Snow",
-  "Rotten Meat","Wax","Gold",
-  "Silver","Copper","Brass",
-  "Diamond","Coal","Gunpowder",
-  "Explosive Gunpowder","Grass","Fungus (fungi)"];
+const Liquids = ["Acid","Alcohol","Blood",
+  "Fungus Blood","Worm Blood","Cement",
+  "Lava","Berserkium","Pheromone",
+  "Levitatium","Hastium","Invisiblium",
+  "Concentrated Mana","Acceleratium","Ambrosia",
+  "Teleportatium","Unstable Polymorphine","Unstable Teleportatium",
+  "Worm Pheromone","Flummoxium","Mud",
+  "Oil","Poison","Toxic Sludge (radioactive_liquid)",
+  "Swamp (swamp)","Urine","Water",
+  "Chilly Water (water_ice)","Swamp (water_swamp)","Chaotic Polymorphine"];
+const Solids = ["Bone","Brass","Coal",
+  "Copper","Diamond","Fungus",
+  "Gold","Grass","Gunpowder",
+  "Explosive Gunpowder","Rotten Meat","Sand",
+  "Silver","Slime","Snow",
+  "Soil","Wax","Honey"];
 const I32 = 2147483647;
 const SEEDMAX = 4294967295;
 
 var hash = document.location.hash;
 seedbox.value = parseInt(hash.replace("#",""));
 seedbox.addEventListener('input', collectSeed);
-seedbox.addEventListener('focus', collectSeed);
 
 function collectSeed() {
   var seed = seedbox.value;

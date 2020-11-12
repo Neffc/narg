@@ -5,17 +5,18 @@
 <link rel="stylesheet" href="styles.css">
 </head>
 <body onload="collectSeed()">
+
 <body>
-
-<h1>NARG</h1>
-
+  <h1>NARG</h1>
+<div class="card">
+<h5>*Updated for 1.0 release!</h5>
 <h2>Formula</h2>
 <section id="input">
   <div>
     <p>Enter seed:</p>
     <input type="number" id="seedbox">
   </div>
-  <p id="maxalert" style="color:#ff6347;"></p>
+  <p id="maxalert" style="color:#AA4444;"></p>
 </section>
 
 <section id="formula">
@@ -37,6 +38,10 @@
       <td id="lc3">LC#3</td>
     </tr>
     <tr>
+      <td></td>
+      <td>-</td>
+    </tr>
+    <tr>
       <th>Alchemic Precursor:</th>
       <td id="ap1">AP#1</td>
     </tr>
@@ -54,14 +59,16 @@
 <section id="info">
   <h2>Information</h2>
   <ul>
-  <li>Each recipe will contain at most 1 <strong>solid</strong> ingredient. Recipes will contain either 3 <strong>liquids</strong>, or 2 <strong>liquids</strong> and 1 <strong>solid</strong>.</li>
+  <li>Each recipe will contain at most 1 solid ingredient. Recipes will contain either 3 liquids, or 2 liquids and 1 solid.</li>
   <p></p>
   <li>Ingredient #2 in each recipe is the one most consumed. To produce a large amount of LC or AP, the #2 ingredient should be obtained in bulk, with the other two ingredients added in smaller amounts.</li>
+  <p></p>
+  <li>These formulas should be correct as of 1.0, but <strong>if you encounter any errors with formula calculation, feel free to message me on Discord at Neff#6398.</strong></li>
   </ul>
 </section>
 
 <section id="footer">
-<footer>Source available at <a href="https://github.com/Neffc/narg/">github.com/Neffc/narg/</a></footer>
+<footer>Source available at <a href="https://github.com/Neffc/narg/">github.com/Neffc/narg</a></footer>
 </section>
 
 <script src="narg.js"></script>
