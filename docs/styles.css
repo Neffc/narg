@@ -3,6 +3,7 @@ body {
   background: linear-gradient(-45deg, #210242, #9198e5);
   display: flex;
   font-family: sans-serif;
+  font-size: 11pt;
   height: 100vh;
   justify-content: center;
   margin: 0;
@@ -47,7 +48,7 @@ body {
   border: 0;
   box-sizing: border-box;
   font-size: 20px;
-  height: 40px;
+  height: 30px;
   margin-top: 20px;
   outline: none !important;
   position: relative;
@@ -72,7 +73,7 @@ td {
 
 table {
   table-layout: fixed;
-  width: 500px;
+  width: 450px;
   color: #262626;
   text-align: left;
   background: #fafafa;
@@ -87,11 +88,10 @@ footer {
 }
 
 section#input {
-  height: 110px
+  height: 90px
 }
 
 section#formula {
-  height: 180px;
   width: 200%
 }
 
@@ -124,6 +124,47 @@ h5 {
 
 .column {
   flex: 80%;
+}
+
+.accordion {
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  padding: 8px;
+  width: 500px;
+  text-align: left;
+  border: none;
+  outline: none;
+  font-size: 12pt;
+  transition: 0.4s;
+}
+
+.active, .accordion:hover {
+  background-color: #ccc;
+}
+
+.panel {
+  padding: 0 18px;
+  background-color: white;
+  display: none;
+  overflow: hidden;
+}
+
+.accordion:after {
+  content: '\002B';
+  color: #777;
+  font-size: 12pt;
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "\2212";
+}
+
+checkbox {
+  font-size: 8pt;
 }
 
 input::-webkit-outer-spin-button,
