@@ -49,7 +49,7 @@ function init (seed) {
 
 //calculates shuffle indices for later use
 function initShuffle (seed) {
-  var nseed = (seed >> 1) + 12534;
+  var nseed = (seed >>> 1) + 12534;
   nseed = lgmRandom(nseed,1);
   var shuf = [];
   for (n = 0; n < 3; n++) {
