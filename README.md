@@ -9,6 +9,8 @@ Options:
     `-l`, `--list`          list all possible alchemy ingredients  
     `-s`, `--search`        search all seeds for a given recipe  
                             -> (can use * to sub any ingredient as a wildcard)  
+                            -> (can use -p to enable parallel search mode)  
+    `-p`, `--parallel`      use multiple processor threads in parallel in search mode  
     `-d`, `--debug`         prints calculated values with seed; ignored when using search flag  
     `-h`, `--help`          print this help menu  
   
