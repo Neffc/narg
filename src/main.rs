@@ -1,4 +1,5 @@
 extern crate getopts;
+extern crate rayon;
 use getopts::Options;
 use std::time::Instant;
 use std::env;
@@ -6,6 +7,8 @@ use alchemy::LIQUIDS;
 use alchemy::SOLIDS;
 use alchemy::init;
 use alchemy::recipe;
+use rayon::iter::IntoParallelIterator;
+use rayon::iter::ParallelIterator;
 
 mod alchemy;
 
@@ -27,7 +30,9 @@ fn main() {
     let mut v = 0;
     opts.optflag("l", "list", "list all possible alchemy ingredients");
     opts.optflag("s", "search", "search all seeds for a given recipe
-                \n-> (can use * to sub any ingredient as a wildcard)");
+                \n-> (can use * to sub any ingredient as a wildcard)
+                \n-> (can use -p to enable parallel search mode)");
+    opts.optflag("p", "parallel", "use multiple processor threads in parallel in search mode");
     opts.optflag("d", "debug", "prints calculated values with seed; ignored when using search flag");
     opts.optflag("h", "help", "print this help menu");
     let matches = match opts.parse(&args[0..]) {
@@ -65,7 +70,7 @@ fn main() {
             return;
         }
         let s_mats: [&str; 6] = [&input[1],&input[2],&input[3],&input[4],&input[5],&input[6]];
-        search(s_mats,v);
+        search(s_mats,v,matches.opt_present("p"));
         return;
     }
     let seed = input[1].parse::<i64>().unwrap();
@@ -96,30 +101,32 @@ fn print_recipe(seed: i64, lc: [&str; 4], ap: [&str; 4], v: usize, prob: [i64; 2
     }
 }
 
-fn search(mut s_mats: [&str; 6], v: usize) {
+fn search(mut s_mats: [&str; 6], v: usize, parallel: bool) {
     let now = Instant::now();
-    let mut j = 0;
-    let mut seed = 1;
   	for n in 0..6 {
     	if !(LIQUIDS.contains(&s_mats[n])) && !(SOLIDS.contains(&s_mats[n])) && s_mats[n] != "*" {
         	println!("'{}' not found! Replacing with wildcard (*)!",s_mats[n]);
         	s_mats[n] = "*";
     	}
     }
-    println!("Searching for:{:?}",s_mats);
+    if !parallel { // limit iterator to 1 thread if not using parallel mode
+        rayon::ThreadPoolBuilder::new().num_threads(1).build_global().unwrap();
+    }
+    let iter = (1..SEEDMAX).into_par_iter(); // rayon library parallel iterator
 
-    while seed <= SEEDMAX {
-	    let (lc,lc_prob,iseed) = recipe(seed,init(seed));
-	    if is_valid(lc,[s_mats[0],s_mats[1],s_mats[2]]) == true {
-	    	let (ap,ap_prob,_x) = recipe(seed,iseed);
-	    	if is_valid(ap,[s_mats[3],s_mats[4],s_mats[5]]) == true {
-	    		print_recipe(seed,lc,ap,v,[lc_prob, ap_prob]);
-	    		j+=1;
-	    	}
-	    }
-	    seed+=1;
-	}
-	println!("Time elapsed: {}.{} seconds!",now.elapsed().as_secs(), now.elapsed().subsec_millis());
+    println!("Searching for:{:?}",s_mats);
+    let j: i64 = iter.map(|seed| {
+        let (lc,lc_prob,iseed) = recipe(seed,init(seed));
+        if is_valid(lc,[s_mats[0],s_mats[1],s_mats[2]]) == true {
+            let (ap,ap_prob,_x) = recipe(seed,iseed);
+            if is_valid(ap,[s_mats[3],s_mats[4],s_mats[5]]) == true {
+                print_recipe(seed,lc,ap,v,[lc_prob, ap_prob]);
+                return 1;
+            }
+        }
+        return 0;
+    }).sum();
+    println!("Time elapsed: {}.{} seconds!",now.elapsed().as_secs(), now.elapsed().subsec_millis());
     println!("{} results found!",j);
 }
 
